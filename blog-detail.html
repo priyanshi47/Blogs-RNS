@@ -1,0 +1,37 @@
+<!-- blog-detail.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Detail</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="navbar">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+    </div>
+
+    <div id="blogDetail"></div>
+
+    <script src="data.js"></script>
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const blogId = params.get('id');
+        const blog = data.posts.find(post => post.id == blogId);
+
+        const blogDetailContainer = document.getElementById("blogDetail");
+        if (blog) {
+            blogDetailContainer.innerHTML = `
+                <h1>${blog.title}</h1>
+                <p>by ${blog.author} on ${new Date(blog.date).toLocaleDateString()}</p>
+                <img src="${blog.img}" alt="${blog.title}" class="blog-detail-image">
+                <p>${blog.content}</p>
+            `;
+        } else {
+            blogDetailContainer.innerHTML = "<p>Blog not found.</p>";
+        }
+    </script>
+</body>
+</html>
