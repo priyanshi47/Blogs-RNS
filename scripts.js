@@ -47,11 +47,15 @@ function renderBlogList(blogs) {
         const blogElement = document.createElement("div");
         blogElement.className = "blog-item";
         blogElement.innerHTML = `
+         <a href="blog-detail.html?id=${blog.id}">
+         
             <img src="${blog.img}" alt="Blog image" class="blog-image">
             <h2>${blog.title}</h2>
+            <p>by ${blog.author} on ${blog.date}</p>
             <p>${blog.content.slice(0, 90)}...</p>
             <a href="blog-detail.html?id=${blog.id}">Read more</a>
-        `;
+         </a>
+            `;
         content.appendChild(blogElement);
     });
 }

@@ -66,14 +66,21 @@ body {
     background: linear-gradient(to right, #4f46e5, #a855f7, #ec4899); /* from-indigo-500 via-purple-500 to-pink-500 */
     color: white;
 }
-
+/* #content{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+  
+    width:100vw;
+} */
 /* Blog Item Styling */
 .blog-item {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 100%;
-    max-width: 600px;
+    width:100%;
+    min-width: 300px;
     padding: 1rem;
     background-color: white;
     border-radius: 8px;
