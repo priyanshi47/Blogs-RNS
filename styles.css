@@ -221,12 +221,14 @@ body {
     font-weight: bold;
     cursor: pointer;
 }
-
+/* Style for category filter section */
 .category-filter {
     margin: 20px 0;
     padding: 10px;
     background-color: #f0f0f0;
     border-radius: 8px;
+    display: flex;
+    flex-wrap: wrap;
 }
 
 .category-button {
@@ -248,3 +250,43 @@ body {
 .category-button:hover {
     background-color: #ddd;
 }
+
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+}
+
+.nav-item {
+    margin: 0 10px;
+    text-decoration: none;
+    color: black;
+}
+
+.navbar input {
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.blog-item {
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin: 10px;
+    border-radius: 8px;
+    background-color: white;
+}
+
+.blog-image {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
+
+button {
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+
