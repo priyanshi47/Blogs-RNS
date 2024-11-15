@@ -1,11 +1,8 @@
-// Function to handle search
+// Handle search functionality
 function handleSearch(event) {
     if (event.key === "Enter") {
         const query = document.getElementById("searchInput").value.toLowerCase();
-        const filteredBlogs = data.posts.filter(post =>
-            post.title.toLowerCase().includes(query) ||
-            post.category.toLowerCase().includes(query)
-        );
+        const filteredBlogs = filterBlogs(query);
         renderBlogList(filteredBlogs);
     }
 }
@@ -15,84 +12,98 @@ function clearSearch() {
     renderBlogList(data.posts);
 }
 
+// Filter blogs based on query
+function filterBlogs(query) {
+    return data.posts.filter(post =>
+        post.title.toLowerCase().includes(query) ||
+        post.category.toLowerCase().includes(query)
+    );
+}
+
 // Category selection logic
 let selectedCategories = [];
 
-const addCategory = (category) => {
-    selectedCategories = [category]; // Reset selectedCategories to only the new category
+function addCategory(category) {
+    selectedCategories = [category]; // Reset selected categories
     filterBlogsByCategory();
-    renderCategoryButtons();
-};
+}
 
-const removeCategory = () => {
+function removeCategory() {
     selectedCategories = []; // Clear the selection
     filterBlogsByCategory();
-    renderCategoryButtons();
-};
+}
 
-const filterBlogsByCategory = () => {
+function filterBlogsByCategory() {
     const filteredBlogs = selectedCategories.length === 0
         ? data.posts
         : data.posts.filter(post => selectedCategories.includes(post.category));
 
     renderBlogList(filteredBlogs);
-};
+}
 
-// Render blogs in the content area
+// Render blogs to the page
 function renderBlogList(blogs) {
     const content = document.getElementById("content");
-    content.innerHTML = ""; // Clear previous content
+    content.innerHTML = blogs.length === 0 ? `<img src="assets/NotFound.gif" width="100vw" height="80vh" alt="Not Found">` : '';
 
     blogs.forEach(blog => {
-        const blogElement = document.createElement("div");
-        blogElement.className = "blog-item";
-        blogElement.innerHTML = `
-         <a href="blog-detail.html?id=${blog.id}">
-         
+        const blogElement = createBlogElement(blog);
+        content.appendChild(blogElement);
+    });
+}
+
+// Create blog item element
+function createBlogElement(blog) {
+    const blogElement = document.createElement("div");
+    blogElement.className = "blog-item";
+    blogElement.innerHTML = `
+        <a href="blog-detail.html?id=${blog.id}">
             <img src="${blog.img}" alt="Blog image" class="blog-image">
             <h2>${blog.title}</h2>
             <p>by ${blog.author} on ${blog.date}</p>
             <p>${blog.content.slice(0, 90)}...</p>
             <a href="blog-detail.html?id=${blog.id}">Read more</a>
-         </a>
-            `;
-        content.appendChild(blogElement);
-    });
+        </a>
+    `;
+    return blogElement;
 }
 
-// Generate category buttons
+// Render category buttons
 function renderCategoryButtons() {
     const categoryFilter = document.getElementById("categoryFilter");
-    const categories = Array.from(new Set(data.posts.map(post => post.category))); // Get unique categories
-    categoryFilter.innerHTML = ''; // Clear existing categories
+    const categories = getUniqueCategories();
+    categoryFilter.innerHTML = '';
 
     categories.forEach(category => {
-        const categoryButton = document.createElement("div");
-        categoryButton.className = "category-button";
-        categoryButton.innerText = category;
-
-        // Highlight selected category
-        if (selectedCategories.includes(category)) {
-            categoryButton.classList.add('selected');
-        } else {
-            categoryButton.classList.remove('selected');
-        }
-
-        // Add click event for each category
-        categoryButton.onclick = () => {
-            if (selectedCategories.includes(category)) {
-                removeCategory();
-            } else {
-                addCategory(category);
-            }
-        };
-
+        const categoryButton = createCategoryButton(category);
         categoryFilter.appendChild(categoryButton);
     });
 }
 
+// Get unique categories
+function getUniqueCategories() {
+    return Array.from(new Set(data.posts.map(post => post.category)));
+}
+
+
+// Create category button element
+function createCategoryButton(category) {
+    const categoryButton = document.createElement("div");
+    categoryButton.className = "category-button";
+    categoryButton.innerText = category;
+
+    // Highlight selected category
+    categoryButton.classList.toggle('selected', selectedCategories.includes(category));
+
+    categoryButton.onclick = () => {
+        selectedCategories.includes(category) ? removeCategory() : addCategory(category);
+    };
+
+    return categoryButton;
+}
+
 // Initialize the app when the page loads
 window.onload = () => {
-    renderCategoryButtons(); // Render category buttons
-    renderBlogList(data.posts); // Display all posts by default
+    renderCategoryButtons();
+    renderBlogList(data.posts);
 };
