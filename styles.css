@@ -214,3 +214,30 @@ body {
     font-weight: bold;
     cursor: pointer;
 }
+
+.category-filter {
+    margin: 20px 0;
+    padding: 10px;
+    background-color: #f0f0f0;
+    border-radius: 8px;
+}
+
+.category-button {
+    display: inline-block;
+    margin: 5px;
+    padding: 10px 20px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.category-button.selected {
+    background-color: #4caf50;
+    color: white;
+}
+
+.category-button:hover {
+    background-color: #ddd;
+}

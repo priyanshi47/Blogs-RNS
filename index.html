@@ -14,7 +14,12 @@
             <a href="index.html" class="nav-item">Home</a>
             <a href="about.html" class="nav-item">About</a>
             <input id="searchInput" type="text" placeholder="Search..." onkeydown="handleSearch(event)">
-            <button onclick="clearSearch()" id="clearButton" >Clear</button>
+            <button onclick="clearSearch()" id="clearButton">Clear</button>
+        </div>
+
+        <!-- Categories Filter -->
+        <div id="categoryFilter" class="category-filter">
+            <!-- Categories will be injected here -->
         </div>
 
         <!-- Main Content -->
@@ -22,7 +27,7 @@
             <!-- Content injected by JavaScript based on routing logic -->
         </div>
     </div>
-    
+
     <script src="data.js"></script>
     <script src="scripts.js"></script>
 </body>
