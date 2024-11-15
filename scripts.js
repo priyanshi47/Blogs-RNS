@@ -19,15 +19,15 @@ function clearSearch() {
 let selectedCategories = [];
 
 const addCategory = (category) => {
-    if (!selectedCategories.includes(category)) {
-        selectedCategories.push(category);
-    }
+    selectedCategories = [category]; // Reset selectedCategories to only the new category
     filterBlogsByCategory();
+    renderCategoryButtons();
 };
 
-const removeCategory = (category) => {
-    selectedCategories = selectedCategories.filter(c => c !== category);
+const removeCategory = () => {
+    selectedCategories = []; // Clear the selection
     filterBlogsByCategory();
+    renderCategoryButtons();
 };
 
 const filterBlogsByCategory = () => {
@@ -57,30 +57,38 @@ function renderBlogList(blogs) {
 }
 
 // Generate category buttons
-function renderCategories() {
+function renderCategoryButtons() {
     const categoryFilter = document.getElementById("categoryFilter");
     const categories = Array.from(new Set(data.posts.map(post => post.category))); // Get unique categories
+    categoryFilter.innerHTML = ''; // Clear existing categories
 
     categories.forEach(category => {
         const categoryButton = document.createElement("div");
         categoryButton.className = "category-button";
         categoryButton.innerText = category;
+
+        // Highlight selected category
+        if (selectedCategories.includes(category)) {
+            categoryButton.classList.add('selected');
+        } else {
+            categoryButton.classList.remove('selected');
+        }
+
+        // Add click event for each category
         categoryButton.onclick = () => {
             if (selectedCategories.includes(category)) {
-                removeCategory(category);
-                categoryButton.classList.remove('selected');
+                removeCategory();
             } else {
                 addCategory(category);
-                categoryButton.classList.add('selected');
             }
         };
-        
+
         categoryFilter.appendChild(categoryButton);
     });
 }
 
 // Initialize the app when the page loads
 window.onload = () => {
-    renderCategories();
+    renderCategoryButtons(); // Render category buttons
     renderBlogList(data.posts); // Display all posts by default
 };
