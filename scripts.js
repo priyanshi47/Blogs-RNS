@@ -1,4 +1,3 @@
-// Handle search functionality
 function handleSearch(event) {
     if (event.key === "Enter") {
         const query = document.getElementById("searchInput").value.toLowerCase();
@@ -20,23 +19,22 @@ function filterBlogs(query) {
     );
 }
 
-// Category selection logic
-let selectedCategories = [];
+// Category selection logic (select only one category at a time)
+let selectedCategory = null;
 
-function addCategory(category) {
-    selectedCategories = [category]; // Reset selected categories
-    filterBlogsByCategory();
-}
-
-function removeCategory() {
-    selectedCategories = []; // Clear the selection
+function setCategory(category) {
+    if (selectedCategory === category) {
+        selectedCategory = null; // Deselect if the same category is clicked again
+    } else {
+        selectedCategory = category; // Select the new category
+    }
     filterBlogsByCategory();
 }
 
 function filterBlogsByCategory() {
-    const filteredBlogs = selectedCategories.length === 0
+    const filteredBlogs = selectedCategory === null
         ? data.posts
-        : data.posts.filter(post => selectedCategories.includes(post.category));
+        : data.posts.filter(post => post.category === selectedCategory);
 
     renderBlogList(filteredBlogs);
 }
@@ -44,7 +42,13 @@ function filterBlogsByCategory() {
 // Render blogs to the page
 function renderBlogList(blogs) {
     const content = document.getElementById("content");
-    content.innerHTML = blogs.length === 0 ? `<img src="assets/NotFound.gif" width="100vw" height="80vh" alt="Not Found">` : '';
+    content.innerHTML = blogs.length === 0 ? `
+    <div class="not-found-container">
+                <iframe src="https://lottie.host/embed/40a3bba4-9cc1-4b83-9c62-c3fccaf8a2db/dZToBHszFI.json"></iframe>
+                <p class="not-found-message">No blogs found matching your search.</p>
+                <p class="try-search-message">Try searching for something else or explore other categories!</p>
+                <a href="index.html"><button class="back-button">Back</button></a>
+            </div>` : '';
 
     blogs.forEach(blog => {
         const blogElement = createBlogElement(blog);
@@ -59,7 +63,7 @@ function createBlogElement(blog) {
     blogElement.innerHTML = `
         <a href="blog-detail.html?id=${blog.id}">
             <img src="${blog.img}" alt="Blog image" class="blog-image">
-            <h2>${blog.title}</h2>
+            <h2>${blog.title.slice(0,30)}...</h2>
             <p>by ${blog.author} on ${blog.date}</p>
             <p>${blog.content.slice(0, 90)}...</p>
             <a href="blog-detail.html?id=${blog.id}">Read more</a>
@@ -85,7 +89,6 @@ function getUniqueCategories() {
     return Array.from(new Set(data.posts.map(post => post.category)));
 }
 
-
 // Create category button element
 function createCategoryButton(category) {
     const categoryButton = document.createElement("div");
@@ -93,10 +96,11 @@ function createCategoryButton(category) {
     categoryButton.innerText = category;
 
     // Highlight selected category
-    categoryButton.classList.toggle('selected', selectedCategories.includes(category));
+    categoryButton.classList.toggle('selected', selectedCategory === category);
 
     categoryButton.onclick = () => {
-        selectedCategories.includes(category) ? removeCategory() : addCategory(category);
+        setCategory(category); // Set category when clicked
+        renderCategoryButtons(); // Re-render category buttons to update the selected state
     };
 
     return categoryButton;
@@ -107,3 +111,4 @@ window.onload = () => {
     renderCategoryButtons();
     renderBlogList(data.posts);
 };
+

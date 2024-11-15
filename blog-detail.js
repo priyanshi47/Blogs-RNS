@@ -28,6 +28,7 @@ function renderSearchResults(blogs) {
 
     searchResultsContainer.innerHTML = blogs.length
         ? blogs.map(blog => `
+              
             <div class="blog-item">
                 <a href="blog-detail.html?id=${blog.id}">
                     <img src="${blog.img}" alt="Blog image" class="blog-image">
@@ -36,7 +37,12 @@ function renderSearchResults(blogs) {
                 </a>
             </div>
         `).join('')
-        : "<img src='assets/NotFound.gif' width='100vw' height='80vh' alt='Not Found'>";
+        : ` <div class="not-found-container">
+        <iframe src="https://lottie.host/embed/40a3bba4-9cc1-4b83-9c62-c3fccaf8a2db/dZToBHszFI.json"></iframe>
+        <p class="not-found-message">No blogs found matching your search.</p>
+        <p class="try-search-message">Try searching for something else or explore other categories!</p>
+       <a href="index.html"><button class="back-button">Back</button></a>
+    </div>`;
 }
 
 // Display the details of the selected blog
@@ -50,6 +56,7 @@ const relatedBlogsContainer = document.getElementById("relatedBlogs");
 function renderBlogDetails(blog) {
     if (blog) {
         blogDetailContainer.innerHTML = `
+        <a href="index.html"><button class="back-button">Back</button></a>
             <h1>${blog.title}</h1>
             <p>by ${blog.author} on ${new Date(blog.date).toLocaleDateString()}</p>
             <img src="${blog.img}" alt="${blog.title}" class="blog-detail-image">
@@ -76,6 +83,9 @@ function renderBlogDetails(blog) {
             `;
         } else {
             relatedBlogsContainer.innerHTML = "<p>No related blogs available.</p>";
+
+            
+
         }
     } else {
         blogDetailContainer.innerHTML = "<p>Blog not found.</p>";
